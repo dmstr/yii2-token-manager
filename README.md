@@ -16,7 +16,7 @@ composer require dmstr/yii2-token-manager
 or add
 
 ```
-"dmstr/yii2-token-manager": "1.0.0"
+"dmstr/yii2-token-manager": "dev-master"
 ```
 
 to the require section of your `composer.json` file.
@@ -30,14 +30,16 @@ use dmstr\tokenManager\components\TokenManager;
 
 return [
     'components' => [
-        'class' => TokenManager::class
+        'tokenManager' => [
+            'class' => TokenManager::class
+        ]
     ]
 ];
 ```
 
 ## Usage
 
-Once the extension is installed, simply use it in your code by:
+Once the extension is installed and configurated, simply use it in your code by:
 
 For more infos about Yii2 and JWT check out [lcobucci/jwt](https://github.com/lcobucci/jwt)
 ```php
