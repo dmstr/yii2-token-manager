@@ -1,0 +1,22 @@
+{
+    "name": "dmstr/yii2-token-manager",
+    "description": "A token manager for jwt tokens",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","jwt"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Elias Luhr",
+            "email": "e.luhr@herzogkommunikation.de"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "^2.0.47",
+        "lcobucci/jwt": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "dmstr\\tokenManager\\": "src"
+        }
+    }
+}
