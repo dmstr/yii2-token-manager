@@ -6,7 +6,7 @@ use dmstr\tokenManager\exceptions\LoadTokenException;
 use yii\rbac\Rule;
 use Yii;
 
-class TokenRule extends Rule
+class TokenRoleRule extends Rule
 {
     /**
      * @inheritdoc
