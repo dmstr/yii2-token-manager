@@ -16,7 +16,7 @@ class TokenRule extends Rule
         try {
             $roles = \Yii::$app->tokenManager->getRoles();
         } catch (LoadTokenException $exception) {
-            Yii::$app->getModule('audit')?->exception($exception);
+            Yii::error($exception->getMessage());
             return false;
         }
         return in_array($item->name, $roles, true);

@@ -3,8 +3,8 @@
 namespace dmstr\tokenManager\components;
 
 use Lcobucci\JWT\UnencryptedToken;
-use project\modules\tokenManager\exceptions\LoadTokenException;
-use project\modules\tokenManager\interfaces\TokenManagerStorageInterface;
+use dmstr\tokenManager\exceptions\LoadTokenException;
+use dmstr\tokenManager\interfaces\TokenManagerStorageInterface;
 use Yii;
 
 /**
