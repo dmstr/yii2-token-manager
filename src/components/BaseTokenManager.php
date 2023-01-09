@@ -46,6 +46,14 @@ abstract class BaseTokenManager extends Component implements TokenManagerInterfa
      */
     public function getRoles(): array
     {
-        return $this->getToken()->claims()->get($this->rolesClaimName, []);
+        return $this->getClaim($this->rolesClaimName, []);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getClaim(string $name, $default = null): mixed
+    {
+        return $this->getToken()->claims()->get($name, $default);
     }
 }
