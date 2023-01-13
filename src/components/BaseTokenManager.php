@@ -46,14 +46,51 @@ abstract class BaseTokenManager extends Component implements TokenManagerInterfa
      */
     public function getRoles(): array
     {
-        return $this->getClaim($this->rolesClaimName, []);
+        return (array)$this->getClaim($this->rolesClaimName, []);
     }
 
     /**
      * @inheritdoc
+     *
+     * Name can be represented in dot notation like this claim1.subClaim
      */
     public function getClaim(string $name, $default = null): mixed
     {
-        return $this->getToken()->claims()->get($name, $default);
+        // split name into separate parts
+        $parts = explode('.', $name);
+
+        // check if there is at least one item
+        $baseName = $parts[0] ?? null;
+        if ($baseName === null) {
+            return $default;
+        }
+
+        // remove first part because it is saved in $baseName
+        unset($parts[0]);
+
+        // set this as base value
+        $baseValue = $this->getToken()->claims()->get($baseName, $default);
+
+        // iterate over the rest of the parts
+        foreach ($parts as $part) {
+            // check if key exists and value is array to continue. If not return value
+            if (!isset($baseValue[$part]) && !is_array($baseValue[$part])) {
+                return $baseValue;
+            }
+            $baseValue = $baseValue[$part];
+        }
+        // return the value
+        return $baseValue;
+    }
+
+    /**
+     * split name to array
+     * @param string $name
+     *
+     * @return array
+     */
+    protected function parseName(string $name): array {
+        $parts = explode('.', $name);
+        return $parts;
     }
 }
