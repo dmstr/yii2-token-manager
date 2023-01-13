@@ -44,6 +44,15 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
         return parent::getRoles();
     }
 
+    public function getClaim(string $name, $default = null): mixed
+    {
+        if ($this->isStorageEnabled()) {
+            $this->loadTokenFromStorage();
+        }
+
+        return parent::getClaim($name, $default);
+    }
+
     /**
      * Persist set token in (session) storage
      *
