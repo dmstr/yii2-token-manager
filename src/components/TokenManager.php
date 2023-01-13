@@ -2,9 +2,9 @@
 
 namespace dmstr\tokenManager\components;
 
-use Lcobucci\JWT\UnencryptedToken;
 use dmstr\tokenManager\exceptions\LoadTokenException;
 use dmstr\tokenManager\interfaces\TokenManagerStorageInterface;
+use Lcobucci\JWT\UnencryptedToken;
 use Yii;
 
 /**
@@ -12,6 +12,13 @@ use Yii;
  */
 class TokenManager extends BaseTokenManager implements TokenManagerStorageInterface
 {
+
+    /**
+     * Suppress all exceptions
+     *
+     * @var bool
+     */
+    public bool $suppressExceptions = true;
 
     /**
      * session value identifier (key)
@@ -37,20 +44,18 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function getRoles(): array
     {
-        if ($this->isStorageEnabled()) {
-            $this->loadTokenFromStorage();
+        if ($this->isStorageEnabled() && $this->loadTokenFromStorage()) {
+            return parent::getRoles();
         }
-
-        return parent::getRoles();
+        return [];
     }
 
     public function getClaim(string $name, $default = null): mixed
     {
-        if ($this->isStorageEnabled()) {
-            $this->loadTokenFromStorage();
+        if ($this->isStorageEnabled() && $this->loadTokenFromStorage()) {
+            return parent::getClaim($name, $default);
         }
-
-        return parent::getClaim($name, $default);
+        return $default;
     }
 
     /**
@@ -67,17 +72,21 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      * Load saved token from (session) storage
      *
      * @throws LoadTokenException
-     * @return void
+     * @return bool
      */
-    public function loadTokenFromStorage(): void
+    public function loadTokenFromStorage(): bool
     {
         /** @var UnencryptedToken|null $token */
         $token = Yii::$app->getSession()->get(static::TOKEN_MANAGER_SESSION_KEY);
         if ($token instanceof UnencryptedToken) {
             $this->setToken($token);
+            return true;
         } else {
-            throw new LoadTokenException();
+            if (!$this->suppressExceptions) {
+                throw new LoadTokenException();
+            }
         }
+        return false;
     }
 
     /**

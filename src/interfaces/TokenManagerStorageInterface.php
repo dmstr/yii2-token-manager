@@ -14,9 +14,9 @@ interface TokenManagerStorageInterface extends TokenManagerInterface
     /**
      * Load saved token from (session) storage
      *
-     * @return void
+     * @return bool
      */
-    public function loadTokenFromStorage(): void;
+    public function loadTokenFromStorage(): bool;
 
     /**
      * Check whether the storage is enabled / disabled
