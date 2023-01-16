@@ -82,15 +82,4 @@ abstract class BaseTokenManager extends Component implements TokenManagerInterfa
         // return the value
         return $baseValue;
     }
-
-    /**
-     * split name to array
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function parseName(string $name): array {
-        $parts = explode('.', $name);
-        return $parts;
-    }
 }
