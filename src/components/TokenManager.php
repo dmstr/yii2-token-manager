@@ -50,12 +50,28 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
         return [];
     }
 
+    /**
+     * @inheritdoc
+     * @throws LoadTokenException
+     */
     public function getClaim(string $name, $default = null): mixed
     {
         if ($this->isStorageEnabled() && $this->loadTokenFromStorage()) {
             return parent::getClaim($name, $default);
         }
         return $default;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws LoadTokenException
+     */
+    public function getToken(): UnencryptedToken
+    {
+        if ($this->isStorageEnabled() && !$this->loadTokenFromStorage()) {
+            throw new LoadTokenException('Error while loading token data');
+        }
+        return parent::getToken();
     }
 
     /**
