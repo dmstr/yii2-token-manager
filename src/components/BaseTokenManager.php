@@ -73,8 +73,12 @@ abstract class BaseTokenManager extends Component implements TokenManagerInterfa
 
         // iterate over the rest of the parts
         foreach ($parts as $part) {
-            // check if key exists and value is array to continue. If not return value
-            if (!isset($baseValue[$part]) && !is_array($baseValue[$part])) {
+            // check if key exists. If not return default.
+            if (!isset($baseValue[$part])) {
+                return $default;
+            }
+            // check if value is array to continue. If not return value
+            if (!is_array($baseValue[$part])) {
                 return $baseValue;
             }
             $baseValue = $baseValue[$part];
