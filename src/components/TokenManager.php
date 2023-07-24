@@ -136,7 +136,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
         if ($this->getUser()->enableSession) {
             $token = $this->getSession()->get(static::TOKEN_MANAGER_SESSION_KEY);
         } else {
-            $token = static::$_storage['token'];
+            $token = static::$_storage['token'] ?? null;
         }
 
         if ($token instanceof UnencryptedToken) {
