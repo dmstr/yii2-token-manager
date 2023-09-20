@@ -36,7 +36,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     /**
      * session value identifier (key)
      */
-    protected const TOKEN_MANAGER_SESSION_KEY = __CLASS__;
+    public string $tokenManagerSessionKey = __CLASS__;
 
     /**
      * Static storage fallback if user session is disabled
@@ -118,9 +118,9 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     public function persistTokenInStorage(): void
     {
         if ($this->getUser()->enableSession) {
-            $this->getSession()->set(static::TOKEN_MANAGER_SESSION_KEY, $this->_token);
+            $this->getSession()->set($this->tokenManagerSessionKey, $this->_token);
         } else {
-          static::$_storage['token'] = $this->_token;
+            static::$_storage['token'] = $this->_token;
         }
     }
 
@@ -134,7 +134,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     {
         /** @var UnencryptedToken|null $token */
         if ($this->getUser()->enableSession) {
-            $token = $this->getSession()->get(static::TOKEN_MANAGER_SESSION_KEY);
+            $token = $this->getSession()->get($this->tokenManagerSessionKey);
         } else {
             $token = static::$_storage['token'] ?? null;
         }
