@@ -27,11 +27,6 @@ class ConsoleTokenManager extends BaseTokenManager implements TokenManagerStorag
     public bool $suppressExceptions = true;
 
     /**
-     * session value identifier (key)
-     */
-    public string $tokenManagerSessionKey = __CLASS__;
-
-    /**
      * Static storage fallback if user session is disabled
      *
      * @var array
