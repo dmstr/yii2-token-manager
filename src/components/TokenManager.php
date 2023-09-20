@@ -51,8 +51,8 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     private Session $_session;
 
     /**
-     * @throws InvalidConfigException
      * @return void
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -128,8 +128,8 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     /**
      * Load saved token from (session) storage
      *
-     * @throws LoadTokenException
      * @return bool
+     * @throws LoadTokenException
      */
     public function loadTokenFromStorage(): bool
     {
@@ -154,14 +154,16 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     /**
      * @return Session
      */
-    protected function getSession(): Session {
+    protected function getSession(): Session
+    {
         return $this->_session;
     }
 
     /**
      * @return User
      */
-    protected function getUser(): User {
+    protected function getUser(): User
+    {
         return $this->_user;
     }
 
@@ -172,14 +174,14 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function isStorageEnabled(): bool
     {
-        if(Yii::$app instanceof \yii\console\Application){
+        if (Yii::$app instanceof \yii\console\Application) {
             return false;
         }
 
-        if (  $this->getUser()->enableSession) {
+        if ($this->getUser()->enableSession) {
             return $this->getSession()->getIsActive();
         }
         // use temporary static property for cache
-        return true;
+        return false;
     }
 }
