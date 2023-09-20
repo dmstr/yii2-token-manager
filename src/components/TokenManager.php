@@ -9,6 +9,7 @@ use yii\base\InvalidConfigException;
 use yii\di\Instance;
 use yii\web\Session;
 use yii\web\User;
+use Yii;
 
 /**
  * @property UnencryptedToken $token
@@ -117,7 +118,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function persistTokenInStorage(): void
     {
-        if ($this->getUser()->enableSession) {
+        if ($this->isStorageEnabled()) {
             $this->getSession()->set($this->tokenManagerSessionKey, $this->_token);
         } else {
             static::$_storage['token'] = $this->_token;
@@ -133,7 +134,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     public function loadTokenFromStorage(): bool
     {
         /** @var UnencryptedToken|null $token */
-        if ($this->getUser()->enableSession) {
+        if ($this->isStorageEnabled()) {
             $token = $this->getSession()->get($this->tokenManagerSessionKey);
         } else {
             $token = static::$_storage['token'] ?? null;
@@ -171,7 +172,11 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function isStorageEnabled(): bool
     {
-        if ($this->getUser()->enableSession) {
+        if(Yii::$app instanceof \yii\console\Application){
+            return false;
+        }
+
+        if (  $this->getUser()->enableSession) {
             return $this->getSession()->getIsActive();
         }
         // use temporary static property for cache
