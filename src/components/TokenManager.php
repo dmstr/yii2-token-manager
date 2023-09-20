@@ -9,6 +9,7 @@ use yii\base\InvalidConfigException;
 use yii\di\Instance;
 use yii\web\Session;
 use yii\web\User;
+use Yii;
 
 /**
  * @property UnencryptedToken $token
@@ -36,7 +37,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     /**
      * session value identifier (key)
      */
-    protected const TOKEN_MANAGER_SESSION_KEY = __CLASS__;
+    public string $tokenManagerSessionKey = __CLASS__;
 
     /**
      * Static storage fallback if user session is disabled
@@ -50,8 +51,8 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     private Session $_session;
 
     /**
-     * @throws InvalidConfigException
      * @return void
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -117,24 +118,24 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function persistTokenInStorage(): void
     {
-        if ($this->getUser()->enableSession) {
-            $this->getSession()->set(static::TOKEN_MANAGER_SESSION_KEY, $this->_token);
+        if ($this->isStorageEnabled()) {
+            $this->getSession()->set($this->tokenManagerSessionKey, $this->_token);
         } else {
-          static::$_storage['token'] = $this->_token;
+            static::$_storage['token'] = $this->_token;
         }
     }
 
     /**
      * Load saved token from (session) storage
      *
-     * @throws LoadTokenException
      * @return bool
+     * @throws LoadTokenException
      */
     public function loadTokenFromStorage(): bool
     {
         /** @var UnencryptedToken|null $token */
-        if ($this->getUser()->enableSession) {
-            $token = $this->getSession()->get(static::TOKEN_MANAGER_SESSION_KEY);
+        if ($this->isStorageEnabled()) {
+            $token = $this->getSession()->get($this->tokenManagerSessionKey);
         } else {
             $token = static::$_storage['token'] ?? null;
         }
@@ -153,14 +154,16 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     /**
      * @return Session
      */
-    protected function getSession(): Session {
+    protected function getSession(): Session
+    {
         return $this->_session;
     }
 
     /**
      * @return User
      */
-    protected function getUser(): User {
+    protected function getUser(): User
+    {
         return $this->_user;
     }
 
@@ -171,10 +174,14 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function isStorageEnabled(): bool
     {
+        if (Yii::$app instanceof \yii\console\Application) {
+            return false;
+        }
+
         if ($this->getUser()->enableSession) {
             return $this->getSession()->getIsActive();
         }
         // use temporary static property for cache
-        return true;
+        return false;
     }
 }
