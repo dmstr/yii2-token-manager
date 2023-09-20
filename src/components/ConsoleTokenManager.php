@@ -34,14 +34,6 @@ class ConsoleTokenManager extends BaseTokenManager implements TokenManagerStorag
     private static array $_storage = [];
 
     /**
-     * @return void
-     */
-    public function init()
-    {
-        parent::init();
-    }
-
-    /**
      * @inheritdoc
      */
     public function setToken(UnencryptedToken $token): void
