@@ -68,10 +68,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
     public function setToken(UnencryptedToken $token): void
     {
         parent::setToken($token);
-
-        if ($this->isStorageEnabled()) {
-            $this->persistTokenInStorage();
-        }
+        $this->persistTokenInStorage();
     }
 
     /**
@@ -81,7 +78,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function getRoles(): array
     {
-        if ($this->isStorageEnabled() && $this->loadTokenFromStorage()) {
+        if ($this->loadTokenFromStorage()) {
             return parent::getRoles();
         }
         return [];
@@ -93,7 +90,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function getClaim(string $name, $default = null): mixed
     {
-        if ($this->isStorageEnabled() && $this->loadTokenFromStorage()) {
+        if ($this->loadTokenFromStorage()) {
             return parent::getClaim($name, $default);
         }
         return $default;
@@ -105,7 +102,7 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      */
     public function getToken(): UnencryptedToken
     {
-        if ($this->isStorageEnabled() && !$this->loadTokenFromStorage()) {
+        if (!$this->loadTokenFromStorage()) {
             throw new LoadTokenException('Error while loading token data');
         }
         return parent::getToken();
@@ -139,7 +136,6 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
         } else {
             $token = static::$_storage['token'] ?? null;
         }
-
         if ($token instanceof UnencryptedToken) {
             $this->setToken($token);
             return true;
