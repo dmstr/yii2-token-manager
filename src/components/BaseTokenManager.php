@@ -25,6 +25,17 @@ abstract class BaseTokenManager extends Component implements TokenManagerInterfa
      */
     protected UnencryptedToken $_token;
 
+    protected UnencryptedToken $_token_id;
+
+    protected UnencryptedToken $_token_refresh;
+
+    protected const TYPE_TOKEN = "token";
+
+    protected const TYPE_TOKEN_ID = "token_id";
+
+    protected const TYPE_TOKEN_REFRESH = "token_refresh";
+
+
     /**
      * @inheritdoc
      */
@@ -33,12 +44,38 @@ abstract class BaseTokenManager extends Component implements TokenManagerInterfa
         return $this->_token;
     }
 
+    public function getIdToken(): UnencryptedToken
+    {
+        return $this->_token_id;
+    }
+
+    public function getRefreshToken(): UnencryptedToken
+    {
+        return $this->_token_refresh;
+    }
+
     /**
      * @inheritdoc
      */
     public function setToken(UnencryptedToken $token): void
     {
         $this->_token = $token;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIdToken(UnencryptedToken $token): void
+    {
+        $this->_token_id = $token;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRefreshToken(UnencryptedToken $token): void
+    {
+        $this->_token_refresh = $token;
     }
 
     /**

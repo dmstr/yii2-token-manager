@@ -9,14 +9,15 @@ interface TokenManagerStorageInterface extends TokenManagerInterface
      *
      * @return void
      */
-    public function persistTokenInStorage(): void;
+    public function persistTokenInStorage($type): void;
 
     /**
      * Load saved token from (session) storage
      *
+     * @param $type
      * @return bool
      */
-    public function loadTokenFromStorage(): bool;
+    public function loadTokenFromStorage($type): bool;
 
     /**
      * Check whether the storage is enabled / disabled
