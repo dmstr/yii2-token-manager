@@ -17,6 +17,18 @@ interface TokenManagerInterface
     public function setToken(UnencryptedToken $token): void;
 
     /**
+     * @param UnencryptedToken $token
+     * @return void
+     */
+    public function setIdToken(UnencryptedToken $token): void;
+
+    /**
+     * @param UnencryptedToken $token
+     * @return void
+     */
+    public function setRefreshToken(UnencryptedToken $token): void;
+
+    /**
      * List of roles assigned to user via token
      *
      * @return array
