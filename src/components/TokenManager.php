@@ -2,6 +2,7 @@
 
 namespace dmstr\tokenManager\components;
 
+use dmstr\tokenManager\event\TokenManagerEvent;
 use dmstr\tokenManager\exceptions\LoadTokenException;
 use dmstr\tokenManager\interfaces\TokenManagerStorageInterface;
 use Lcobucci\JWT\UnencryptedToken;
@@ -81,11 +82,21 @@ class TokenManager extends BaseTokenManager implements TokenManagerStorageInterf
      * @param UnencryptedToken $refresh_token
      * @return void
      */
-    public function setTokens(UnencryptedToken $token, UnencryptedToken $id_token, UnencryptedToken $refresh_token): void
+    public function setTokens(UnencryptedToken $token, UnencryptedToken $id_token, UnencryptedToken $refresh_token, $fireEvent = false): void
     {
+        if($fireEvent) {
+            $event = new TokenManagerEvent($token, $id_token, $refresh_token);
+            $this->trigger(TokenManagerEvent::EVENT_BEFORE_SET_TOKEN, $event);
+        }
+
         self::setToken($token);
         self::setIdToken($id_token);
         self::setRefreshToken($refresh_token);
+
+        if($fireEvent) {
+            $event = new TokenManagerEvent($token, $id_token, $refresh_token);
+            $this->trigger(TokenManagerEvent::EVENT_AFTER_SET_TOKEN, $event);
+        }
     }
 
     /**
